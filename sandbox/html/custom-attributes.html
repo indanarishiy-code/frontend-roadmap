@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<style>
+			li[data-status="active"] {
+				background-color: green;
+			}
+			li[data-status="inactive"] {
+				background-color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<ul>
+			<li data-status="inactive">
+				<button aria-pressed="false">Item 1: Toggle</button>
+			</li>
+			<li data-status="inactive">
+				<button aria-pressed="false">Item 2: Toggle</button>
+			</li>
+			<li data-status="inactive">
+				<button aria-pressed="false">Item 3: Toggle</button>
+			</li>
+		</ul>
+
+		<script>
+			document.querySelectorAll("li button").forEach((button) => {
+				button.addEventListener("click", () => {
+					const li = button.parentElement
+
+					const isActive = li.dataset.status === "active"
+
+					li.dataset.status = isActive ? "inactive" : "active"
+
+					button.setAttribute("aria-pressed", !isActive)
+
+					button.disabled = !isActive // will be active after this toggle, so disable it
+				})
+			})
+		</script>
+	</body>
+</html>
