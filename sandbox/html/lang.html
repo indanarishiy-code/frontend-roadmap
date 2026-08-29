@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<title>Profile Card</title>
+
+		<style>
+			* {
+				box-sizing: border-box;
+			}
+
+			body {
+				margin: 0;
+				padding: 2rem;
+				font-family: Arial, sans-serif;
+				background-color: #f3f4f6;
+			}
+
+			.profile-card {
+				max-width: 400px;
+				margin-inline: auto;
+				padding-inline: 1.5rem;
+				padding-block: 1rem;
+
+				border-inline-start: 5px solid #22c55e;
+
+				background-color: white;
+				border-radius: 8px;
+
+				text-align: start;
+			}
+
+			.profile-card h2 {
+				margin-block-start: 0;
+				margin-block-end: 0.5rem;
+			}
+
+			.profile-card p {
+				margin-block: 0;
+				line-height: 1.6;
+				color: #555;
+			}
+
+			#toggle-direction {
+				margin-block-start: 1.5rem;
+				padding-inline: 1rem;
+				padding-block: 0.5rem;
+
+				border: 0;
+				border-radius: 5px;
+
+				background-color: #2563eb;
+				color: white;
+
+				cursor: pointer;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="profile-card">
+			<h2>Jane Doe</h2>
+
+			<p>
+				Frontend developer who enjoys building accessible, responsive,
+				and user-friendly interfaces.
+			</p>
+		</div>
+
+		<button id="toggle-direction" type="button" aria-pressed="false">
+			Toggle Direction
+		</button>
+
+		<script>
+			const html = document.documentElement
+			const button = document.querySelector("#toggle-direction")
+
+			button.addEventListener("click", () => {
+				const isRTL = html.dir === "rtl"
+
+				html.dir = isRTL ? "ltr" : "rtl"
+
+				// Only change lang if the content itself is changing language.
+				html.lang = isRTL ? "en" : "ar"
+
+				button.setAttribute("aria-pressed", String(!isRTL))
+			})
+		</script>
+	</body>
+</html>
