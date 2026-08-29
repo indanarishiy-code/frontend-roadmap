@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<img
+			src="https://picsum.photos/id/40/800/600"
+			alt="A cat sleeping on a windowsill"
+			srcset="
+				https://picsum.photos/id/40/480/360   480w,
+				https://picsum.photos/id/40/800/600   800w,
+				https://picsum.photos/id/40/1200/900 1200w
+			"
+			sizes="(max-width: 600px) 100vw, 50vw"
+			loading="lazy"
+			decoding="async"
+			fetchpriority="high"
+		/>
+
+		<picture>
+			<source
+				srcset="https://picsum.photos/id/1015/800/600.webp"
+				type="image/webp"
+			/>
+			<img src="https://picsum.photos/id/1015/800/600" alt="Description" />
+		</picture>
+
+		<video controls poster="https://picsum.photos/id/1016/640/360" preload="metadata">
+			<source
+				src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+				type="video/mp4"
+			/>
+			<track
+				kind="captions"
+				src="https://raw.githubusercontent.com/mdn/dom-examples/main/media/examples/friday.vtt"
+				srclang="en"
+				label="English"
+			/>
+		</video>
+
+		<iframe
+			src="https://www.openstreetmap.org/export/embed.html?bbox=-0.13,51.50,-0.11,51.51&layer=mapnik"
+			sandbox="allow-scripts allow-same-origin"
+			loading="lazy"
+			referrerpolicy="no-referrer"
+		>
+		</iframe>
+
+		<object data="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf" type="application/pdf">
+			<p>
+				PDF cannot be displayed.
+				<a href="https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf">Download it</a>.
+			</p>
+		</object>
+
+		<img
+			src="https://picsum.photos/id/1019/400/400"
+			usemap="#regions"
+			alt="Diagram"
+		/>
+		<map name="regions">
+			<area
+				shape="rect"
+				coords="0,0,100,100"
+				href="part1.html"
+				alt="Part 1"
+			/>
+		</map>
+
+		<canvas id="chart" width="400" height="200"></canvas>
+	</body>
+</html>
