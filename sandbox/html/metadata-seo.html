@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>How to Bake Sourdough Bread</title>
+
+		<!-- basic SEO -->
+		<meta name="description" content="A step-by-step guide to baking sourdough at home." />
+		<link rel="canonical" href="https://example.com/blog/sourdough" />
+
+		<!-- robots meta directives: control crawling / indexing -->
+		<!-- index/noindex, follow/nofollow, plus: noarchive, nosnippet,
+		     max-snippet:-1, max-image-preview:large, noimageindex, unavailable_after -->
+		<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+		<!-- target one crawler specifically -->
+		<meta name="googlebot" content="index, follow" />
+
+		<!-- Open Graph (Facebook, LinkedIn, Slack, Discord, ...) -->
+		<meta property="og:type" content="article" />
+		<meta property="og:title" content="How to Bake Sourdough Bread" />
+		<meta property="og:description" content="A step-by-step guide to baking sourdough at home." />
+		<meta property="og:url" content="https://example.com/blog/sourdough" />
+		<meta property="og:site_name" content="Example Kitchen" />
+		<meta property="og:locale" content="en_US" />
+		<meta property="og:image" content="https://example.com/img/sourdough.jpg" />
+		<meta property="og:image:secure_url" content="https://example.com/img/sourdough.jpg" />
+		<meta property="og:image:type" content="image/jpeg" />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content="A freshly baked loaf of sourdough" />
+		<!-- article-specific OG -->
+		<meta property="article:published_time" content="2026-08-01T09:00:00Z" />
+		<meta property="article:modified_time" content="2026-08-20T12:00:00Z" />
+		<meta property="article:author" content="https://example.com/authors/jane" />
+		<meta property="article:section" content="Baking" />
+		<meta property="article:tag" content="bread" />
+
+		<!-- Twitter / X Card -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:site" content="@examplekitchen" />
+		<meta name="twitter:creator" content="@janebakes" />
+		<meta name="twitter:title" content="How to Bake Sourdough Bread" />
+		<meta name="twitter:description" content="A step-by-step guide to baking sourdough at home." />
+		<meta name="twitter:image" content="https://example.com/img/sourdough.jpg" />
+		<meta name="twitter:image:alt" content="A freshly baked loaf of sourdough" />
+
+		<!-- JSON-LD structured data (schema.org) -->
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Article",
+				"headline": "How to Bake Sourdough Bread",
+				"description": "A step-by-step guide to baking sourdough at home.",
+				"image": ["https://example.com/img/sourdough.jpg"],
+				"datePublished": "2026-08-01T09:00:00Z",
+				"dateModified": "2026-08-20T12:00:00Z",
+				"author": {
+					"@type": "Person",
+					"name": "Jane Baker",
+					"url": "https://example.com/authors/jane"
+				},
+				"publisher": {
+					"@type": "Organization",
+					"name": "Example Kitchen",
+					"logo": {
+						"@type": "ImageObject",
+						"url": "https://example.com/img/logo.png"
+					}
+				},
+				"mainEntityOfPage": {
+					"@type": "WebPage",
+					"@id": "https://example.com/blog/sourdough"
+				}
+			}
+		</script>
+
+		<!-- second JSON-LD block: breadcrumbs (multiple blocks are allowed) -->
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "BreadcrumbList",
+				"itemListElement": [
+					{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://example.com/" },
+					{ "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://example.com/blog" },
+					{ "@type": "ListItem", "position": 3, "name": "Sourdough" }
+				]
+			}
+		</script>
+
+		<!-- resource hints -->
+		<!-- dns-prefetch: resolve DNS early for a third-party origin -->
+		<link rel="dns-prefetch" href="https://cdn.example.com" />
+		<!-- preconnect: DNS + TCP + TLS early (use for critical origins) -->
+		<link rel="preconnect" href="https://cdn.example.com" crossorigin />
+		<!-- prefetch: low-priority fetch of a resource for the NEXT navigation -->
+		<link rel="prefetch" href="/blog/next-article.html" as="document" />
+		<!-- preload: high-priority fetch of a resource needed for THIS page -->
+		<link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
+		<!-- modulepreload: preload + parse/compile an ES module (and optionally its deps) -->
+		<link rel="modulepreload" href="/js/app.js" />
+		<link rel="modulepreload" href="/js/utils.js" />
+
+		<!-- favicons & manifest -->
+		<link rel="icon" href="/favicon.ico" sizes="32x32" />
+		<link rel="icon" href="/icon.svg" type="image/svg+xml" />
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+		<link rel="manifest" href="/site.webmanifest" />
+		<meta name="theme-color" content="#ffffff" />
+		<meta name="theme-color" content="#111111" media="(prefers-color-scheme: dark)" />
+	</head>
+	<body>
+		<article>
+			<h1>How to Bake Sourdough Bread</h1>
+			<p>Content goes here.</p>
+		</article>
+	</body>
+</html>
