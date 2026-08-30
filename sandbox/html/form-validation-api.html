@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<!-- novalidate: stop the browser's own popups so JS drives validation -->
+		<form id="form" novalidate>
+			<label for="email">Email</label>
+			<input type="email" id="email" name="email" required />
+
+			<label for="pw">Password</label>
+			<input type="password" id="pw" name="pw" required minlength="8" />
+
+			<label for="pw2">Confirm password</label>
+			<input type="password" id="pw2" name="pw2" required />
+
+			<label for="age">Age</label>
+			<input type="number" id="age" name="age" min="18" max="120" />
+
+			<button type="submit">Submit</button>
+		</form>
+
+		<pre id="log"></pre>
+
+		<script>
+			const form = document.getElementById("form");
+			const email = document.getElementById("email");
+			const pw = document.getElementById("pw");
+			const pw2 = document.getElementById("pw2");
+			const age = document.getElementById("age");
+			const log = document.getElementById("log");
+
+			const print = (msg) => (log.textContent += msg + "\n");
+
+			// --- checkValidity(): returns true/false, fires an "invalid" event on
+			// failing controls, but shows NO UI ---
+			email.addEventListener("input", () => {
+				print("email.checkValidity() -> " + email.checkValidity());
+				// ValidityState object: which constraint failed
+				print("  valueMissing: " + email.validity.valueMissing);
+				print("  typeMismatch: " + email.validity.typeMismatch);
+				print("  validationMessage: " + email.validationMessage);
+			});
+
+			// --- setCustomValidity(msg): marks control invalid with a custom message.
+			// Pass "" to clear it and make the control valid again ---
+			function checkPasswordsMatch() {
+				if (pw2.value !== pw.value) {
+					pw2.setCustomValidity("Passwords do not match");
+				} else {
+					pw2.setCustomValidity(""); // clear -> valid
+				}
+			}
+			pw.addEventListener("input", checkPasswordsMatch);
+			pw2.addEventListener("input", checkPasswordsMatch);
+
+			// customError flag reflects a non-empty setCustomValidity message
+			pw2.addEventListener("input", () => {
+				print("pw2.validity.customError -> " + pw2.validity.customError);
+			});
+
+			// react to the "invalid" event (dispatched by checkValidity / submit)
+			age.addEventListener("invalid", () => {
+				if (age.validity.rangeUnderflow) {
+					age.setCustomValidity("Must be 18 or older");
+				} else if (age.validity.rangeOverflow) {
+					age.setCustomValidity("That age seems unlikely");
+				}
+			});
+			age.addEventListener("input", () => age.setCustomValidity(""));
+
+			// --- reportValidity(): same as checkValidity() but ALSO shows the
+			// native error bubble and focuses the first invalid control ---
+			form.addEventListener("submit", (e) => {
+				e.preventDefault();
+
+				// validate the whole form at once
+				if (!form.checkValidity()) {
+					print("form invalid - calling reportValidity()");
+					form.reportValidity(); // shows UI on first invalid field
+					return;
+				}
+
+				print("form valid - submitting: " + new URLSearchParams(new FormData(form)));
+			});
+
+			// you can also call reportValidity() on a single element
+			document.addEventListener("keydown", (e) => {
+				if (e.key === "Enter" && e.target === email) {
+					email.reportValidity();
+				}
+			});
+		</script>
+	</body>
+</html>
