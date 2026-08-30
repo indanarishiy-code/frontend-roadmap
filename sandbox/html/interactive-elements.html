@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<style>
+			/* ::backdrop = the layer behind a modal dialog / popover */
+			dialog::backdrop {
+				background: rgb(0 0 0 / 0.5);
+			}
+			#infoPopover {
+				padding: 1rem;
+				border: 1px solid #888;
+			}
+			#infoPopover::backdrop {
+				background: rgb(0 0 0 / 0.1);
+			}
+		</style>
+	</head>
+	<body>
+		<!-- details / summary: native disclosure widget -->
+		<!-- summary is the label; open attribute controls initial state -->
+		<details>
+			<summary>What is HTML?</summary>
+			<p>HyperText Markup Language.</p>
+		</details>
+
+		<details open>
+			<summary>Already expanded</summary>
+			<p>This one starts open.</p>
+		</details>
+
+		<!-- name attribute makes an exclusive accordion (only one open at a time) -->
+		<details name="faq">
+			<summary>Question 1</summary>
+			<p>Answer 1</p>
+		</details>
+		<details name="faq">
+			<summary>Question 2</summary>
+			<p>Answer 2</p>
+		</details>
+
+		<!-- react to open/close -->
+		<script>
+			document.querySelectorAll("details").forEach((d) => {
+				d.addEventListener("toggle", () => console.log("details open:", d.open));
+			});
+		</script>
+
+		<hr />
+
+		<!-- dialog: showModal() vs show() -->
+		<dialog id="modal">
+			<form method="dialog">
+				<p>Modal dialog (traps focus, blocks page, has ::backdrop).</p>
+				<!-- method="dialog" closes and sets returnValue to the button value -->
+				<button value="cancel">Cancel</button>
+				<button value="ok">OK</button>
+			</form>
+		</dialog>
+
+		<dialog id="nonModal">
+			<p>Non-modal dialog (page stays interactive, no backdrop).</p>
+			<button onclick="nonModal.close()">Close</button>
+		</dialog>
+
+		<button onclick="modal.showModal()">Open modal</button>
+		<button onclick="nonModal.show()">Open non-modal</button>
+
+		<script>
+			const modal = document.getElementById("modal");
+			// close event + returnValue
+			modal.addEventListener("close", () => {
+				console.log("dialog returnValue:", modal.returnValue);
+			});
+			// clicking the backdrop: detect via target being the dialog itself
+			modal.addEventListener("click", (e) => {
+				if (e.target === modal) modal.close("backdrop");
+			});
+			// cancel event fires on Esc
+			modal.addEventListener("cancel", () => console.log("dialog cancelled (Esc)"));
+		</script>
+
+		<hr />
+
+		<!-- Popover API: popover attribute + popovertarget button -->
+		<!-- popover="auto" -> light-dismiss (Esc / click outside), only one open per group -->
+		<button popovertarget="menuPopover">Toggle menu popover</button>
+		<div id="menuPopover" popover="auto">
+			<p>Auto popover. Click outside or press Esc to close.</p>
+		</div>
+
+		<!-- popover="manual" -> stays until explicitly closed -->
+		<button popovertarget="toast" popovertargetaction="show">Show toast</button>
+		<div id="toast" popover="manual">
+			Manual popover
+			<button popovertarget="toast" popovertargetaction="hide">x</button>
+		</div>
+
+		<!-- popover with backdrop styling -->
+		<button popovertarget="infoPopover">Info</button>
+		<div id="infoPopover" popover="auto">
+			<h3>Info</h3>
+			<p>Has a ::backdrop rule in the stylesheet.</p>
+		</div>
+
+		<script>
+			const menu = document.getElementById("menuPopover");
+			// imperative control: showPopover() / hidePopover() / togglePopover()
+			menu.addEventListener("toggle", (e) => {
+				console.log("popover:", e.oldState, "->", e.newState);
+			});
+			// e.g. menu.showPopover(); menu.hidePopover(); menu.togglePopover();
+		</script>
+
+		<hr />
+
+		<!-- Invoker Commands: command + commandfor (declarative, no JS) -->
+		<!-- built-in commands: show-modal, close, request-close (dialog);
+		     show-popover, hide-popover, toggle-popover (popover) -->
+		<button command="show-popover" commandfor="cmdPopover">Open (command API)</button>
+		<div id="cmdPopover" popover="auto">
+			<p>Opened via command="show-popover" commandfor="cmdPopover".</p>
+			<button command="hide-popover" commandfor="cmdPopover">Close</button>
+		</div>
+
+		<button command="show-modal" commandfor="cmdDialog">Open dialog (command API)</button>
+		<dialog id="cmdDialog">
+			<p>Opened with command="show-modal".</p>
+			<button command="close" commandfor="cmdDialog">Close</button>
+		</dialog>
+
+		<script>
+			// custom commands: any name starting with "--"
+			const target = document.getElementById("cmdPopover");
+			target.addEventListener("command", (e) => {
+				console.log("command received:", e.command, "source:", e.source);
+			});
+		</script>
+
+		<hr />
+
+		<!-- template: inert, parsed-but-not-rendered content, cloned via JS -->
+		<template id="rowTpl">
+			<li class="row">
+				<span class="name"></span>
+				<button class="del">delete</button>
+			</li>
+		</template>
+
+		<ul id="list"></ul>
+		<button id="add">Add row</button>
+
+		<script>
+			const tpl = document.getElementById("rowTpl");
+			const list = document.getElementById("list");
+			let n = 0;
+
+			document.getElementById("add").addEventListener("click", () => {
+				// clone the template's content (a DocumentFragment)
+				const node = tpl.content.cloneNode(true);
+				node.querySelector(".name").textContent = "Item " + ++n;
+				node.querySelector(".del").addEventListener("click", (e) => {
+					e.target.closest("li").remove();
+				});
+				list.append(node);
+			});
+		</script>
+	</body>
+</html>
