@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+	</head>
+	<body>
+		<!-- custom element name must contain a hyphen -->
+		<greeting-message name="Ada"></greeting-message>
+
+		<script>
+			class GreetingMessage extends HTMLElement {
+				// runs when the element is added to the page
+				connectedCallback() {
+					const name = this.getAttribute("name") || "world";
+					this.textContent = `Hello, ${name}!`;
+				}
+			}
+
+			// register the tag
+			customElements.define("greeting-message", GreetingMessage);
+		</script>
+
+		<hr />
+
+		<!-- shadow DOM attached to a plain element (no custom element needed) -->
+		<div id="host">Light DOM content (hidden once shadow root exists)</div>
+
+		<script>
+			const host = document.getElementById("host");
+
+			// attachShadow creates an encapsulated subtree
+			const shadow = host.attachShadow({ mode: "open" });
+
+			// styles + markup here are scoped to the shadow tree
+			shadow.innerHTML = `
+				<style>
+					p { color: rebeccapurple; font-family: system-ui, sans-serif; }
+				</style>
+				<p>This lives in the shadow DOM.</p>
+			`;
+		</script>
+
+		<hr />
+
+		<!-- declarative shadow DOM: shadow root built by the HTML parser, no JS -->
+		<!-- a <template shadowrootmode> as the FIRST child becomes the host's shadow root -->
+		<article-card>
+			<template shadowrootmode="open">
+				<style>
+					.card { border: 1px solid #ccc; border-radius: 8px; padding: 1rem; }
+					h2 { margin: 0 0 0.5rem; font-size: 1rem; }
+				</style>
+				<div class="card">
+					<h2><slot name="title">Untitled</slot></h2>
+					<slot>No content</slot>
+				</div>
+			</template>
+
+			<!-- light DOM children get slotted into the shadow tree above -->
+			<span slot="title">Declarative Shadow DOM</span>
+			<p>Rendered before any script runs — great for SSR.</p>
+		</article-card>
+
+		<script>
+			// the shadow root already exists from parsing; access it as usual
+			const card = document.querySelector("article-card");
+			console.log("has shadowRoot from HTML:", !!card.shadowRoot);
+		</script>
+	</body>
+</html>
