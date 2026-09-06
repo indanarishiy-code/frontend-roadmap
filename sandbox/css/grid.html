@@ -1,0 +1,358 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>CSS Grid</title>
+
+		<style>
+			body {
+				font-family: system-ui, sans-serif;
+				max-width: 900px;
+				margin: 0 auto;
+				padding: 20px;
+			}
+			section {
+				margin-bottom: 48px;
+			}
+			h2 {
+				border-bottom: 2px solid #333;
+				padding-bottom: 4px;
+			}
+			p.note {
+				color: #555;
+				font-size: 0.9rem;
+			}
+			/* generic cell look so every grid item is visible regardless of which demo it's in */
+			[class^="item"] {
+				background: #cde4ff;
+				border: 1px solid #4a7fc9;
+				padding: 8px;
+				text-align: center;
+				font-size: 0.85rem;
+			}
+
+			/* 1. explicit grid: fixed track sizes with grid-template-columns/rows */
+			.grid-basic {
+				display: grid;
+				grid-template-columns: 100px 200px 100px;
+				grid-template-rows: 60px 60px;
+				gap: 8px;
+			}
+
+			/* 2. fr unit: splits remaining space into proportional shares */
+			.grid-fr {
+				display: grid;
+				grid-template-columns: 1fr 2fr 1fr;
+				gap: 8px;
+			}
+
+			/* 3. repeat(): avoid writing the same track size N times */
+			.grid-repeat {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 8px;
+			}
+
+			/* 4. minmax(): a track that won't shrink below min or grow past max */
+			.grid-minmax {
+				display: grid;
+				grid-template-columns: minmax(80px, 1fr) minmax(80px, 1fr) 120px;
+				gap: 8px;
+			}
+
+			/* 5. row-gap / column-gap: independent spacing per axis (gap is the shorthand) */
+			.grid-gap {
+				display: grid;
+				grid-template-columns: repeat(3, 1fr);
+				row-gap: 24px;
+				column-gap: 4px;
+			}
+
+			/* 6. grid-template-areas: name regions, then place items by name instead of line numbers */
+			.grid-areas {
+				display: grid;
+				grid-template-columns: 150px 1fr 1fr;
+				grid-template-rows: 60px 120px 60px;
+				gap: 8px;
+				grid-template-areas:
+					"header header header"
+					"sidebar main    main"
+					"footer footer footer";
+			}
+			.area-header {
+				grid-area: header;
+			}
+			.area-sidebar {
+				grid-area: sidebar;
+			}
+			.area-main {
+				grid-area: main;
+			}
+			.area-footer {
+				grid-area: footer;
+			}
+
+			/* 7. line-based placement: grid-column/grid-row target the numbered grid lines directly */
+			.grid-lines {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				grid-template-rows: repeat(2, 60px);
+				gap: 8px;
+			}
+			.lines-a {
+				grid-column: 1 / 3; /* start line 1, end line 3 -> spans 2 columns */
+			}
+			.lines-b {
+				grid-column: span 2; /* same result: "span 2" counts tracks instead of naming the end line */
+			}
+			.lines-c {
+				grid-row: 1 / 3; /* spans both rows */
+				grid-column: 4;
+			}
+
+			/* 8. implicit grid: items beyond the explicit template create new tracks automatically */
+			.grid-implicit {
+				display: grid;
+				grid-template-columns: repeat(3, 80px);
+				grid-auto-rows: 50px; /* size of rows the browser creates implicitly */
+				grid-auto-flow: row; /* try "column" or "row dense" */
+				gap: 8px;
+			}
+
+			/* 9. alignment: *-items positions each item inside its own cell,
+			   *-content positions the whole track grid inside the container (needs extra container space) */
+			.grid-align-items {
+				display: grid;
+				grid-template-columns: repeat(3, 100px);
+				grid-template-rows: repeat(2, 60px);
+				gap: 8px;
+				height: 160px;
+				border: 2px dashed #999;
+				justify-items: center; /* start | end | center | stretch (default) */
+				align-items: center;
+			}
+			.grid-align-items [class^="item"] {
+				width: 60px;
+				height: 30px;
+			}
+			.grid-align-content {
+				display: grid;
+				grid-template-columns: repeat(3, 80px);
+				grid-template-rows: repeat(2, 50px);
+				gap: 8px;
+				height: 260px; /* extra room so *-content has somewhere to distribute the tracks */
+				border: 2px dashed #999;
+				justify-content: space-between; /* start | end | center | space-between | space-around | space-evenly */
+				align-content: center;
+			}
+
+			/* 10. responsive grid: repeat(auto-fit/auto-fill, minmax(...)) with no media queries */
+			.grid-responsive {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+				gap: 8px;
+			}
+
+			/* 11. subgrid: child grid's tracks line up with the parent's, instead of sizing independently */
+			.grid-subgrid-parent {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 8px;
+			}
+			.grid-subgrid-parent .item-sub-wrap {
+				grid-column: 1 / 4;
+				display: grid;
+				grid-template-columns: subgrid; /* reuses columns 1-4 from the parent, not its own new tracks */
+				gap: 8px;
+				background: none;
+				border: none;
+				padding: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>CSS Grid</h1>
+
+		<section>
+			<h2>1. Explicit tracks — grid-template-columns / grid-template-rows</h2>
+			<p class="note">Fixed-size column and row tracks, laid out in a 2D grid.</p>
+			<div class="grid-basic">
+				<div class="item">1</div>
+				<div class="item">2</div>
+				<div class="item">3</div>
+				<div class="item">4</div>
+				<div class="item">5</div>
+				<div class="item">6</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>2. The fr unit</h2>
+			<p class="note">
+				1fr 2fr 1fr splits remaining space into 4 shares: the middle column gets
+				double the width of each outer column.
+			</p>
+			<div class="grid-fr">
+				<div class="item">1fr</div>
+				<div class="item">2fr</div>
+				<div class="item">1fr</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>3. repeat()</h2>
+			<p class="note">
+				<code>repeat(4, 1fr)</code> instead of writing <code>1fr 1fr 1fr 1fr</code>.
+			</p>
+			<div class="grid-repeat">
+				<div class="item">1</div>
+				<div class="item">2</div>
+				<div class="item">3</div>
+				<div class="item">4</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>4. minmax()</h2>
+			<p class="note">
+				Each flexible column won't shrink below 80px even as the fr unit tries to
+				compress it. Resize the window to see the floor kick in.
+			</p>
+			<div class="grid-minmax">
+				<div class="item">min 80px</div>
+				<div class="item">min 80px</div>
+				<div class="item">fixed 120px</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>5. gap (row-gap / column-gap)</h2>
+			<p class="note">Row gap (24px) and column gap (4px) set independently.</p>
+			<div class="grid-gap">
+				<div class="item">1</div>
+				<div class="item">2</div>
+				<div class="item">3</div>
+				<div class="item">4</div>
+				<div class="item">5</div>
+				<div class="item">6</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>6. grid-template-areas</h2>
+			<p class="note">
+				Named regions in the CSS itself read like an ASCII wireframe of the
+				layout; items are placed with <code>grid-area</code> instead of line
+				numbers.
+			</p>
+			<div class="grid-areas">
+				<div class="item area-header">header</div>
+				<div class="item area-sidebar">sidebar</div>
+				<div class="item area-main">main</div>
+				<div class="item area-footer">footer</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>7. Line-based placement — grid-column / grid-row</h2>
+			<p class="note">
+				<code>grid-column: 1 / 3</code> and <code>grid-column: span 2</code>
+				produce the same 2-column span; <code>grid-row: 1 / 3</code> spans both
+				rows.
+			</p>
+			<div class="grid-lines">
+				<div class="item lines-a">1 / 3</div>
+				<div class="item lines-b">span 2</div>
+				<div class="item">auto</div>
+				<div class="item lines-c">row 1/3</div>
+				<div class="item">auto</div>
+				<div class="item">auto</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>8. Implicit grid — grid-auto-rows / grid-auto-flow</h2>
+			<p class="note">
+				Only 3 columns are declared explicitly; extra items overflow into
+				automatically-created rows sized by <code>grid-auto-rows</code>.
+			</p>
+			<div class="grid-implicit">
+				<div class="item">1</div>
+				<div class="item">2</div>
+				<div class="item">3</div>
+				<div class="item">4</div>
+				<div class="item">5</div>
+				<div class="item">6</div>
+				<div class="item">7</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>9. Alignment — *-items vs *-content</h2>
+			<p class="note">
+				<code>justify-items</code> / <code>align-items</code> position each item
+				inside its own cell.
+			</p>
+			<div class="grid-align-items">
+				<div class="item">1</div>
+				<div class="item">2</div>
+				<div class="item">3</div>
+				<div class="item">4</div>
+				<div class="item">5</div>
+				<div class="item">6</div>
+			</div>
+			<p class="note">
+				<code>justify-content</code> / <code>align-content</code> position the
+				whole set of tracks inside a container that's larger than the grid
+				needs.
+			</p>
+			<div class="grid-align-content">
+				<div class="item">1</div>
+				<div class="item">2</div>
+				<div class="item">3</div>
+				<div class="item">4</div>
+				<div class="item">5</div>
+				<div class="item">6</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>10. Responsive grid — auto-fit + minmax, no media queries</h2>
+			<p class="note">
+				<code>repeat(auto-fit, minmax(120px, 1fr))</code>: as many 120px+
+				columns fit as possible, then they stretch to fill the row. Resize the
+				window to watch columns reflow.
+			</p>
+			<div class="grid-responsive">
+				<div class="item">1</div>
+				<div class="item">2</div>
+				<div class="item">3</div>
+				<div class="item">4</div>
+				<div class="item">5</div>
+			</div>
+		</section>
+
+		<section>
+			<h2>11. Subgrid</h2>
+			<p class="note">
+				The inner wrapper spans columns 1-4 of the parent and declares
+				<code>grid-template-columns: subgrid</code>, so its own children line up
+				with the parent's column tracks instead of creating a new independent
+				grid.
+			</p>
+			<div class="grid-subgrid-parent">
+				<div class="item">A</div>
+				<div class="item">B</div>
+				<div class="item">C</div>
+				<div class="item">D</div>
+				<div class="item-sub-wrap">
+					<div class="item">sub 1</div>
+					<div class="item">sub 2</div>
+					<div class="item">sub 3</div>
+					<div class="item">sub 4</div>
+				</div>
+			</div>
+		</section>
+	</body>
+</html>
